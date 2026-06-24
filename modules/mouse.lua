@@ -1,6 +1,6 @@
 local M = {}
 
-local ringSizes = { 260, 180, 100 }
+local ringSizes = { 480, 360, 260, 180, 100 }
 local animationSteps = 12
 local animationInterval = 0.03
 

@@ -1,10 +1,16 @@
 local M = {}
 
 function M.openWezTerm()
+	local focusedApp = hs.application.frontmostApplication()
 	local app = hs.application.get("WezTerm")
 
 	if not app then
 		hs.application.launchOrFocus("WezTerm")
+		return
+	end
+
+	if not focusedApp or focusedApp:name() ~= "WezTerm" then
+		app:activate()
 		return
 	end
 
