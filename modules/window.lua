@@ -8,6 +8,16 @@ function M.toggleFullScreen()
 	end
 end
 
+function M.maximize()
+	local win = hs.window.focusedWindow()
+
+	if not win then
+		return
+	end
+
+	win:setFrame(win:screen():frame(), 0)
+end
+
 local function nextScreenFor(screen)
 	local screens = hs.screen.allScreens()
 
