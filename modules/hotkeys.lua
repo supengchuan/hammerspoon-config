@@ -7,6 +7,7 @@ local M = {}
 function M.bindAll()
 	hs.hotkey.bind({ "ctrl", "cmd" }, "M", mouse.locate)
 	hs.hotkey.bind({ "ctrl", "cmd" }, "N", window.moveToNextScreen)
+	hs.hotkey.bind({ "ctrl", "cmd" }, "P", window.moveToPreviousScreen)
 	hs.hotkey.bind({ "ctrl" }, "return", window.maximize)
 	hs.hotkey.bind({ "ctrl", "cmd" }, "return", window.toggleFullScreen)
 	hs.hotkey.bind({ "ctrl", "cmd" }, "T", apps.openWezTerm)
