@@ -1,4 +1,5 @@
 local media = require("modules.media")
+local bluetooth = require("modules.bluetooth")
 
 local M = {}
 local watcher
@@ -23,6 +24,12 @@ local function handleEvent(event)
 		or event == hs.caffeinate.watcher.screensDidLock
 		or event == hs.caffeinate.watcher.systemWillSleep then
 		pauseOnce()
+	end
+
+	if event == hs.caffeinate.watcher.systemWillSleep then
+		bluetooth.setEnabled(false)
+	elseif event == hs.caffeinate.watcher.systemDidWake then
+		bluetooth.setEnabled(true)
 	end
 end
 

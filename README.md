@@ -2,7 +2,7 @@
 
 一套用于 macOS 的个人 [Hammerspoon](https://www.hammerspoon.org/) 自动化配置。
 
-它提供常用窗口操作、鼠标定位提示、WezTerm 快捷启动，并在锁屏或睡眠时暂停 QQ 音乐。Lua 配置变更后会自动重新加载。
+它提供常用窗口操作、鼠标定位提示、WezTerm 快捷启动和蓝牙控制，并在锁屏或睡眠时暂停 QQ 音乐、自动关闭蓝牙，在系统唤醒时重新开启蓝牙。Lua 配置变更后会自动重新加载。
 
 ## 前置条件
 
@@ -25,6 +25,7 @@ git clone https://github.com/supengchuan/hammerspoon-config.git ~/.hammerspoon
 | 快捷键 | 功能 |
 | --- | --- |
 | `Ctrl + Cmd + M` | 在鼠标当前位置显示红色动画圆环 |
+| `Ctrl + Cmd + B` | 切换蓝牙开关 |
 | `Ctrl + Cmd + N` | 将当前窗口移至下一块屏幕 |
 | `Ctrl + Return` | 最大化当前窗口（保留菜单栏与 Dock 区域） |
 | `Ctrl + Cmd + Return` | 切换当前窗口的全屏状态 |
@@ -34,3 +35,4 @@ git clone https://github.com/supengchuan/hammerspoon-config.git ~/.hammerspoon
 
 - 锁屏、会话失活或系统睡眠时，自动暂停正在运行的 QQ 音乐。
 - 同一次锁屏产生的重复系统事件会被去重，避免重复执行暂停操作。
+- 系统睡眠时自动关闭蓝牙，系统唤醒时自动开启蓝牙。

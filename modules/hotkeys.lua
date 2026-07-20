@@ -1,10 +1,12 @@
 local apps = require("modules.apps")
+local bluetooth = require("modules.bluetooth")
 local mouse = require("modules.mouse")
 local window = require("modules.window")
 
 local M = {}
 
 function M.bindAll()
+	hs.hotkey.bind({ "ctrl", "cmd" }, "B", bluetooth.toggle)
 	hs.hotkey.bind({ "ctrl", "cmd" }, "M", mouse.locate)
 	hs.hotkey.bind({ "ctrl", "cmd" }, "N", window.moveToNextScreen)
 	hs.hotkey.bind({ "ctrl", "cmd" }, "P", window.moveToPreviousScreen)
