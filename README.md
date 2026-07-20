@@ -9,6 +9,17 @@
 - macOS
 - 已安装 [Hammerspoon](https://www.hammerspoon.org/)
 - 已在“系统设置 → 隐私与安全性 → 辅助功能”中允许 Hammerspoon 控制电脑
+- 已安装 `blueutil`；本配置固定从 `/opt/homebrew/bin/blueutil` 调用它（Apple Silicon Homebrew 路径）
+
+安装并验证 `blueutil`：
+
+```sh
+brew install blueutil
+test -x /opt/homebrew/bin/blueutil
+/opt/homebrew/bin/blueutil --power
+```
+
+最后一条命令应输出 `0` 或 `1`，分别表示蓝牙关闭或开启。若 Homebrew 或 `blueutil` 位于其他路径，请将 `modules/bluetooth.lua` 中的可执行文件路径改为实际绝对路径。
 
 ## 使用
 

@@ -18,18 +18,18 @@ local function pauseOnce()
 end
 
 local function handleEvent(event)
+	if event == hs.caffeinate.watcher.systemWillSleep then
+		bluetooth.setEnabled(false)
+	elseif event == hs.caffeinate.watcher.systemDidWake then
+		bluetooth.setEnabled(true)
+	end
+
 	-- sessionDidResignActive 比 screensDidLock 更早触发，可以在会话真正锁住前
 	-- 给 QQ 音乐一点时间接收菜单命令。
 	if event == hs.caffeinate.watcher.sessionDidResignActive
 		or event == hs.caffeinate.watcher.screensDidLock
 		or event == hs.caffeinate.watcher.systemWillSleep then
 		pauseOnce()
-	end
-
-	if event == hs.caffeinate.watcher.systemWillSleep then
-		bluetooth.setEnabled(false)
-	elseif event == hs.caffeinate.watcher.systemDidWake then
-		bluetooth.setEnabled(true)
 	end
 end
 

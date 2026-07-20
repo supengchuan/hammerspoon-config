@@ -1,9 +1,15 @@
 local bluetoothCalls = {}
 local bindings = {}
 local systemEventCallback
+local now = 10
+local pauseShouldFail = false
 
 package.loaded["modules.media"] = {
-	pauseAll = function() end,
+	pauseAll = function()
+		if pauseShouldFail then
+			error("media pause failed")
+		end
+	end,
 }
 package.loaded["modules.bluetooth"] = {
 	setEnabled = function(enabled)
@@ -13,7 +19,7 @@ package.loaded["modules.bluetooth"] = {
 }
 
 hs = {
-	timer = { secondsSinceEpoch = function() return 10 end },
+	timer = { secondsSinceEpoch = function() return now end },
 	caffeinate = {
 		watcher = {
 			systemWillSleep = "systemWillSleep",
@@ -39,6 +45,14 @@ systemEventCallback(hs.caffeinate.watcher.systemDidWake)
 assert(#bluetoothCalls == 2)
 assert(bluetoothCalls[1] == false)
 assert(bluetoothCalls[2] == true)
+
+-- A media failure must not suppress the unconditional sleep Bluetooth action.
+now = 13
+pauseShouldFail = true
+local ok = pcall(systemEventCallback, hs.caffeinate.watcher.systemWillSleep)
+assert(ok == false)
+assert(#bluetoothCalls == 3)
+assert(bluetoothCalls[3] == false)
 
 local bluetooth = require("modules.bluetooth")
 local hotkeys = require("modules.hotkeys")
