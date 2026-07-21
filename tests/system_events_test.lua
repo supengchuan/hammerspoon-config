@@ -42,32 +42,40 @@ hs = {
 local systemEvents = require("modules.system_events")
 systemEvents.start()
 
+local function resetBluetoothCalls()
+	bluetoothCalls = {}
+end
+
 powerSource = "AC Power"
 systemEventCallback(hs.caffeinate.watcher.systemWillSleep)
-
 assert(#bluetoothCalls == 0)
 
+resetBluetoothCalls()
 powerSource = "Battery Power"
 systemEventCallback(hs.caffeinate.watcher.systemWillSleep)
+assert(#bluetoothCalls == 1)
 assert(bluetoothCalls[1] == false)
 
+resetBluetoothCalls()
 powerSource = "Off Line"
 systemEventCallback(hs.caffeinate.watcher.systemWillSleep)
-assert(bluetoothCalls[2] == false)
+assert(#bluetoothCalls == 1)
+assert(bluetoothCalls[1] == false)
 
+resetBluetoothCalls()
 systemEventCallback(hs.caffeinate.watcher.systemDidWake)
-
-assert(#bluetoothCalls == 3)
-assert(bluetoothCalls[3] == true)
+assert(#bluetoothCalls == 1)
+assert(bluetoothCalls[1] == true)
 
 -- A media failure must not suppress the battery-powered sleep Bluetooth action.
 now = 13
 pauseShouldFail = true
 powerSource = "Battery Power"
+resetBluetoothCalls()
 local ok = pcall(systemEventCallback, hs.caffeinate.watcher.systemWillSleep)
 assert(ok == false)
-assert(#bluetoothCalls == 4)
-assert(bluetoothCalls[4] == false)
+assert(#bluetoothCalls == 1)
+assert(bluetoothCalls[1] == false)
 
 local bluetooth = require("modules.bluetooth")
 local hotkeys = require("modules.hotkeys")
