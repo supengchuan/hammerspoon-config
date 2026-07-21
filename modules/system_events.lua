@@ -19,7 +19,10 @@ end
 
 local function handleEvent(event)
 	if event == hs.caffeinate.watcher.systemWillSleep then
-		bluetooth.setEnabled(false)
+		local powerSource = hs.battery.powerSourceType()
+		if powerSource == "Battery Power" or powerSource == "Off Line" then
+			bluetooth.setEnabled(false)
+		end
 	elseif event == hs.caffeinate.watcher.systemDidWake then
 		bluetooth.setEnabled(true)
 	end

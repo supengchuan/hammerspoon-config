@@ -3,6 +3,7 @@ local bindings = {}
 local systemEventCallback
 local now = 10
 local pauseShouldFail = false
+local powerSource = "AC Power"
 
 package.loaded["modules.media"] = {
 	pauseAll = function()
@@ -19,6 +20,7 @@ package.loaded["modules.bluetooth"] = {
 }
 
 hs = {
+	battery = { powerSourceType = function() return powerSource end },
 	timer = { secondsSinceEpoch = function() return now end },
 	caffeinate = {
 		watcher = {
@@ -39,20 +41,33 @@ hs = {
 
 local systemEvents = require("modules.system_events")
 systemEvents.start()
+
+powerSource = "AC Power"
 systemEventCallback(hs.caffeinate.watcher.systemWillSleep)
+
+assert(#bluetoothCalls == 0)
+
+powerSource = "Battery Power"
+systemEventCallback(hs.caffeinate.watcher.systemWillSleep)
+assert(bluetoothCalls[1] == false)
+
+powerSource = "Off Line"
+systemEventCallback(hs.caffeinate.watcher.systemWillSleep)
+assert(bluetoothCalls[2] == false)
+
 systemEventCallback(hs.caffeinate.watcher.systemDidWake)
 
-assert(#bluetoothCalls == 2)
-assert(bluetoothCalls[1] == false)
-assert(bluetoothCalls[2] == true)
+assert(#bluetoothCalls == 3)
+assert(bluetoothCalls[3] == true)
 
--- A media failure must not suppress the unconditional sleep Bluetooth action.
+-- A media failure must not suppress the battery-powered sleep Bluetooth action.
 now = 13
 pauseShouldFail = true
+powerSource = "Battery Power"
 local ok = pcall(systemEventCallback, hs.caffeinate.watcher.systemWillSleep)
 assert(ok == false)
-assert(#bluetoothCalls == 3)
-assert(bluetoothCalls[3] == false)
+assert(#bluetoothCalls == 4)
+assert(bluetoothCalls[4] == false)
 
 local bluetooth = require("modules.bluetooth")
 local hotkeys = require("modules.hotkeys")
