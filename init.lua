@@ -1,8 +1,8 @@
-local configReloader = require("modules.config_reloader")
+--local configReloader = require("modules.config_reloader")
 local hotkeys = require("modules.hotkeys")
 local systemEvents = require("modules.system_events")
 
-configReloader.start()
+--configReloader.start()
 hotkeys.bindAll()
 systemEvents.start()
 
