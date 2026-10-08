@@ -2,14 +2,17 @@
 
 一套用于 macOS 的个人 [Hammerspoon](https://www.hammerspoon.org/) 自动化配置。
 
-它提供常用窗口操作、鼠标定位提示、WezTerm 快捷启动和蓝牙手动控制，并在锁屏或睡眠时暂停 QQ 音乐。Lua 配置变更后会自动重新加载。
+它提供常用窗口操作、鼠标定位提示、WezTerm 快捷启动和蓝牙手动控制，并在锁屏或睡眠时暂停 QQ
+音乐。接通电源时，它还会阻止显示器因用户空闲而进入睡眠；切换到电池供电后立即恢复系统默认行
+为。Lua 配置变更后会自动重新加载。
 
 ## 前置条件
 
 - macOS
 - 已安装 [Hammerspoon](https://www.hammerspoon.org/)
 - 已在“系统设置 → 隐私与安全性 → 辅助功能”中允许 Hammerspoon 控制电脑
-- 已安装 `blueutil`；本配置固定从 `/opt/homebrew/bin/blueutil` 调用它（Apple Silicon Homebrew 路径）
+- 已安装 `blueutil`；本配置固定从 `/opt/homebrew/bin/blueutil` 调用它（Apple Silicon Homebrew
+  路径）
 
 安装并验证 `blueutil`：
 
@@ -19,7 +22,8 @@ test -x /opt/homebrew/bin/blueutil
 /opt/homebrew/bin/blueutil --power
 ```
 
-最后一条命令应输出 `0` 或 `1`，分别表示蓝牙关闭或开启。若 Homebrew 或 `blueutil` 位于其他路径，请将 `modules/bluetooth.lua` 中的可执行文件路径改为实际绝对路径。
+最后一条命令应输出 `0` 或 `1`，分别表示蓝牙关闭或开启。若 Homebrew 或 `blueutil` 位于其他路径，
+请将 `modules/bluetooth.lua` 中的可执行文件路径改为实际绝对路径。
 
 ## 使用
 
@@ -29,21 +33,24 @@ test -x /opt/homebrew/bin/blueutil
 git clone https://github.com/supengchuan/hammerspoon-config.git ~/.hammerspoon
 ```
 
-若 `~/.hammerspoon` 已存在，请先备份原有配置，或将本仓库内容合并进去。首次启动 Hammerspoon 后，菜单栏会显示提示 “Hammerspoon config loaded”。之后修改任意 `.lua` 文件会自动生效。
+若 `~/.hammerspoon` 已存在，请先备份原有配置，或将本仓库内容合并进去。首次启动 Hammerspoon
+后，菜单栏会显示提示 “Hammerspoon config loaded”。之后修改任意 `.lua` 文件会自动生效。
 
 ## 快捷键
 
-| 快捷键 | 功能 |
-| --- | --- |
-| `Ctrl + Cmd + M` | 在鼠标当前位置显示红色动画圆环 |
-| `Ctrl + Cmd + B` | 切换蓝牙开关 |
-| `Ctrl + Cmd + N` | 将当前窗口移至下一块屏幕 |
-| `Ctrl + Return` | 最大化当前窗口（保留菜单栏与 Dock 区域） |
-| `Ctrl + Cmd + Return` | 切换当前窗口的全屏状态 |
-| `Ctrl + Cmd + T` | 启动或切换到 WezTerm；已聚焦 WezTerm 时新建窗口 |
+| 快捷键                | 功能                                            |
+| --------------------- | ----------------------------------------------- |
+| `Ctrl + Cmd + M`      | 在鼠标当前位置显示红色动画圆环                  |
+| `Ctrl + Cmd + B`      | 切换蓝牙开关                                    |
+| `Ctrl + Cmd + N`      | 将当前窗口移至下一块屏幕                        |
+| `Ctrl + Return`       | 最大化当前窗口（保留菜单栏与 Dock 区域）        |
+| `Ctrl + Cmd + Return` | 切换当前窗口的全屏状态                          |
+| `Ctrl + Cmd + T`      | 启动或切换到 WezTerm；已聚焦 WezTerm 时新建窗口 |
 
 ## 自动行为
 
+- 接通电源时阻止显示器因用户空闲而进入睡眠；使用电池或离线供电时不干预系统休眠策略。
+- 锁屏 10 秒后撤销显示器常亮并请求熄屏；若提前解锁则取消熄屏，解锁后仅在接通电源时恢复常亮。
 - 锁屏、会话失活或系统睡眠时，自动暂停正在运行的 QQ 音乐。
 - 同一次锁屏产生的重复系统事件会被去重，避免重复执行暂停操作。
 - 睡眠时的蓝牙开关策略由 SleepWatcher 管理，不属于本 Hammerspoon 配置的职责。
