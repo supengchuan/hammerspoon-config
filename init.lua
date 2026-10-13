@@ -1,7 +1,8 @@
 local featureManager = require("modules.feature_manager")
-local featureMenu = require("modules.feature_menu")
+local featurePath = hs.configdir .. "/feature.lua"
 
-featureManager.start()
-featureMenu.start()
+if hs.fs.attributes(featurePath) then
+	featureManager.start(dofile(featurePath))
+end
 
 hs.alert.show("Hammerspoon config loaded")

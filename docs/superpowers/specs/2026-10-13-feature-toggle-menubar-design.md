@@ -1,5 +1,7 @@
 # Hammerspoon 功能开关菜单设计
 
+> 已废弃：功能现由 Git 忽略的 `feature.lua` 控制，当前用法见 `README.md`。
+
 ## 目标
 
 把功能启停从修改 `init.lua` 改为 Hammerspoon 菜单栏中的即时开关。切换后无需重载配置，选择结果在 Hammerspoon 重启后保持。

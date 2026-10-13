@@ -37,20 +37,36 @@ git clone https://github.com/supengchuan/hammerspoon-config.git ~/.hammerspoon
 后，菜单栏会显示提示 “Hammerspoon config loaded”。修改 `.lua` 文件后，请使用 Hammerspoon 的
 “Reload Config” 重新加载配置。
 
-## 功能开关
+## 功能配置
 
-菜单栏中的 `HS` 菜单可以即时启用或停用以下功能，无需修改 `init.lua` 或重新加载配置：
+功能开关由仓库根目录的 `feature.lua` 控制。该文件不会提交到 Git；首次使用时复制示例：
+
+```sh
+cp feature.example.lua feature.lua
+```
+
+配置格式：
+
+```lua
+return {
+    hotkeys = true,
+    system_events = true,
+    display_awake = false,
+}
+```
+
+只有值严格为 `true` 的功能会启动。缺少配置项或缺少整个 `feature.lua` 时，对应功能不会启动。
+修改后，从 Hammerspoon 自带的锤子菜单选择 “Reload Config” 使其生效。
+
+可配置的功能包括：
 
 - 快捷键
 - 锁屏或睡眠时暂停音乐
 - 显示器常亮
 
-勾选状态会保存在 Hammerspoon 设置中，并在重新加载或重启后恢复。首次运行时，快捷键和暂停音乐
-默认开启，显示器常亮默认关闭。
-
 ## 快捷键
 
-以下快捷键在 `HS → 快捷键` 开启时生效：
+以下快捷键在 `feature.lua` 中设置 `hotkeys = true` 时生效：
 
 | 快捷键                | 功能                                            |
 | --------------------- | ----------------------------------------------- |

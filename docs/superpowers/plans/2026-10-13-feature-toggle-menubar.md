@@ -1,5 +1,7 @@
 # Hammerspoon Feature Toggle Menubar Implementation Plan
 
+> Superseded: feature enablement is now controlled by the Git-ignored `feature.lua`; see `README.md`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Let the user enable and disable three Hammerspoon features immediately from a persistent menu bar menu without editing `init.lua` or reloading Hammerspoon.
