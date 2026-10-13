@@ -1,43 +1,45 @@
-local caffeinateCalls = {}
+local events = {}
+
+package.loaded["modules.feature_manager"] = {
+	start = function()
+		table.insert(events, "manager")
+	end,
+}
+package.loaded["modules.feature_menu"] = {
+	start = function()
+		table.insert(events, "menu")
+	end,
+}
 
 package.loaded["modules.hotkeys"] = {
-	bindAll = function() end,
+	bindAll = function()
+		error("old hotkey startup path used")
+	end,
 }
 package.loaded["modules.system_events"] = {
-	start = function() end,
+	start = function()
+		error("old system-event startup path used")
+	end,
+}
+package.loaded["modules.display_awake"] = {
+	start = function()
+		error("old display-awake startup path used")
+	end,
 }
 
 hs = {
 	alert = {
-		show = function() end,
-	},
-	battery = {
-		powerSourceType = function()
-			return "AC Power"
+		show = function(message)
+			table.insert(events, "alert:" .. message)
 		end,
-		watcher = {
-			new = function()
-				return { start = function() end }
-			end,
-		},
 	},
-	caffeinate = {
-		set = function(sleepType, enabled)
-			table.insert(caffeinateCalls, { sleepType = sleepType, enabled = enabled })
-		end,
-		watcher = {
-			new = function()
-				return { start = function() end }
-			end,
-		},
-	},
-	execute = function() end,
 }
 
 dofile("init.lua")
 
-assert(#caffeinateCalls == 1)
-assert(caffeinateCalls[1].sleepType == "displayIdle")
-assert(caffeinateCalls[1].enabled == true)
+assert(#events == 3)
+assert(events[1] == "manager")
+assert(events[2] == "menu")
+assert(events[3] == "alert:Hammerspoon config loaded")
 
 print("init tests passed")
