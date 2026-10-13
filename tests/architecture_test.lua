@@ -23,9 +23,32 @@ local function appendAll(target, values)
 end
 
 local function assertNoImport(path, content, layer)
-	local pattern = "require%s*%(%s*[\"']" .. layer .. "%."
-	assert(not content:match(pattern), path .. " must not import " .. layer)
+	local callPrefixes = {
+		"require%s*%(%s*",
+		"require%s+",
+	}
+	local moduleLiterals = {
+		"[\"']" .. layer .. "%.",
+		"%[=*%[" .. layer .. "%.",
+	}
+
+	for _, prefix in ipairs(callPrefixes) do
+		for _, literal in ipairs(moduleLiterals) do
+			assert(not content:match(prefix .. literal), path .. " must not import " .. layer)
+		end
+	end
 end
+
+local function assertRejectsImport(content, layer)
+	local ok = pcall(assertNoImport, "fixture.lua", content, layer)
+	assert(not ok, "expected forbidden " .. layer .. " import to be rejected: " .. content)
+end
+
+assertRejectsImport('local dependency = require("core.feature_manager")', "core")
+assertRejectsImport('local dependency = require "core.feature_manager"', "core")
+assertRejectsImport("local dependency = require [[features.hotkeys]]", "features")
+assertRejectsImport("local dependency = require([=[core.feature_manager]=])", "core")
+assertNoImport("fixture.lua", 'local dependency = require("actions.bluetooth")', "core")
 
 local activeFiles = { "README.md", "init.lua" }
 for _, directory in ipairs({ "actions", "core", "features", "tests" }) do
