@@ -5,6 +5,7 @@ local sessionActive = true
 local displayIdlePrevented
 local displaySleepRequested = false
 local displaySleepTimer
+local running = false
 
 local DISPLAY_SLEEP_DELAY_SECONDS = 10
 
@@ -37,6 +38,10 @@ local function scheduleDisplaySleep()
 	end
 
 	displaySleepTimer = hs.timer.doAfter(DISPLAY_SLEEP_DELAY_SECONDS, function()
+		if not running then
+			return
+		end
+
 		displaySleepTimer = nil
 		if sessionActive then
 			return
@@ -64,13 +69,90 @@ local function handleSessionEvent(event)
 end
 
 function M.start()
-	syncDisplayIdlePrevention()
+	if running then
+		return
+	end
 
-	batteryWatcher = hs.battery.watcher.new(syncDisplayIdlePrevention)
-	batteryWatcher:start()
+	sessionActive = true
+	displaySleepRequested = false
 
-	sessionWatcher = hs.caffeinate.watcher.new(handleSessionEvent)
-	sessionWatcher:start()
+	local batteryCandidate
+	local sessionCandidate
+	local ok, err = pcall(function()
+		syncDisplayIdlePrevention()
+
+		batteryCandidate = hs.battery.watcher.new(syncDisplayIdlePrevention)
+		batteryCandidate:start()
+
+		sessionCandidate = hs.caffeinate.watcher.new(handleSessionEvent)
+		sessionCandidate:start()
+	end)
+
+	if not ok then
+		if sessionCandidate then
+			pcall(function()
+				sessionCandidate:stop()
+			end)
+		end
+		if batteryCandidate then
+			pcall(function()
+				batteryCandidate:stop()
+			end)
+		end
+		cancelDisplaySleepTimer()
+		sessionActive = true
+		displaySleepRequested = false
+		setDisplayIdlePrevented(false)
+		error(err, 0)
+	end
+
+	batteryWatcher = batteryCandidate
+	sessionWatcher = sessionCandidate
+	running = true
+end
+
+function M.stop()
+	if not running then
+		return
+	end
+
+	running = false
+	cancelDisplaySleepTimer()
+
+	local battery = batteryWatcher
+	local session = sessionWatcher
+	batteryWatcher = nil
+	sessionWatcher = nil
+
+	local stopError
+	if battery then
+		local ok, err = pcall(function()
+			battery:stop()
+		end)
+		if not ok then
+			stopError = err
+		end
+	end
+	if session then
+		local ok, err = pcall(function()
+			session:stop()
+		end)
+		if not ok and not stopError then
+			stopError = err
+		end
+	end
+
+	sessionActive = true
+	displaySleepRequested = false
+	setDisplayIdlePrevented(false)
+
+	if stopError then
+		error(stopError, 0)
+	end
+end
+
+function M.isRunning()
+	return running
 end
 
 return M
