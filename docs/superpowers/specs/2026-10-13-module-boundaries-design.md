@@ -62,7 +62,7 @@ init.lua -> core -> features -> actions
 
 - All existing Lua tests pass from their new paths.
 - Every tracked Lua file parses successfully.
-- Repository search finds no remaining `modules.` imports or references to `modules/`.
+- Repository search over active runtime source, tests and README finds no remaining `modules.` imports or references to `modules/`. Historical design and implementation records are not rewritten.
 - With local `feature.lua`, Hammerspoon reloads with the same enabled and disabled feature state as before the migration.
 - With `feature.lua` absent, no feature starts, preserving the current opt-in behavior.
 
