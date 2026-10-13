@@ -1,5 +1,4 @@
 local media = require("modules.media")
-local bluetooth = require("modules.bluetooth")
 
 local M = {}
 local watcher
@@ -18,15 +17,6 @@ local function pauseOnce()
 end
 
 local function handleEvent(event)
-	--if event == hs.caffeinate.watcher.systemWillSleep then
-	--	local powerSource = hs.battery.powerSourceType()
-	--	if powerSource == "Battery Power" or powerSource == "Off Line" then
-	--		bluetooth.setEnabled(false)
-	--	end
-	--elseif event == hs.caffeinate.watcher.systemDidWake then
-	--	bluetooth.setEnabled(true)
-	--end
-
 	-- sessionDidResignActive 比 screensDidLock 更早触发，可以在会话真正锁住前
 	-- 给 QQ 音乐一点时间接收菜单命令。
 	if
@@ -39,8 +29,36 @@ local function handleEvent(event)
 end
 
 function M.start()
-	watcher = hs.caffeinate.watcher.new(handleEvent)
-	watcher:start()
+	if watcher then
+		return
+	end
+
+	local candidate = hs.caffeinate.watcher.new(handleEvent)
+	local ok, err = pcall(function()
+		candidate:start()
+	end)
+
+	if not ok then
+		pcall(function()
+			candidate:stop()
+		end)
+		error(err, 0)
+	end
+
+	watcher = candidate
+end
+
+function M.stop()
+	if not watcher then
+		return
+	end
+
+	watcher:stop()
+	watcher = nil
+end
+
+function M.isRunning()
+	return watcher ~= nil
 end
 
 return M
