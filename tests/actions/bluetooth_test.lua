@@ -28,7 +28,7 @@ hs = {
   },
 }
 
-local bluetooth = require("modules.bluetooth")
+local bluetooth = require("actions.bluetooth")
 
 -- Query failure: do not toggle or alert, and preserve the command failure in the log.
 resetObservations()

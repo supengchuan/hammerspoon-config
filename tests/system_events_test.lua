@@ -4,7 +4,7 @@ local pauseShouldFail = false
 local watcherStartShouldFail = false
 local watchers = {}
 
-package.loaded["modules.media"] = {
+package.loaded["actions.media"] = {
 	pauseAll = function()
 		pauseCalls = pauseCalls + 1
 		if pauseShouldFail then

@@ -1,4 +1,4 @@
-local media = require("modules.media")
+local media = require("actions.media")
 
 local M = {}
 local watcher

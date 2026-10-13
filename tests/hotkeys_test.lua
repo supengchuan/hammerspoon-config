@@ -15,10 +15,10 @@ local callbacks = {
 	toggleFullScreen = function() end,
 }
 
-package.loaded["modules.apps"] = { openWezTerm = callbacks.openWezTerm }
-package.loaded["modules.bluetooth"] = { toggle = callbacks.toggleBluetooth }
-package.loaded["modules.mouse"] = { locate = callbacks.locateMouse }
-package.loaded["modules.window"] = {
+package.loaded["actions.apps"] = { openWezTerm = callbacks.openWezTerm }
+package.loaded["actions.bluetooth"] = { toggle = callbacks.toggleBluetooth }
+package.loaded["actions.mouse"] = { locate = callbacks.locateMouse }
+package.loaded["actions.window"] = {
 	moveToNextScreen = callbacks.moveToNextScreen,
 	moveToPreviousScreen = callbacks.moveToPreviousScreen,
 	maximize = callbacks.maximizeWindow,

@@ -1,7 +1,7 @@
-local apps = require("modules.apps")
-local bluetooth = require("modules.bluetooth")
-local mouse = require("modules.mouse")
-local window = require("modules.window")
+local apps = require("actions.apps")
+local bluetooth = require("actions.bluetooth")
+local mouse = require("actions.mouse")
+local window = require("actions.window")
 
 local M = {}
 local activeHotkeys
