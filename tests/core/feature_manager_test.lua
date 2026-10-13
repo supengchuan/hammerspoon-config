@@ -35,7 +35,7 @@ local function loadManager()
 		displayAwake = newFeature("display_awake"),
 	}
 
-	package.loaded["modules.feature_manager"] = nil
+	package.loaded["core.feature_manager"] = nil
 	package.loaded["features.hotkeys"] = features.hotkeys
 	package.loaded["features.system_events"] = features.systemEvents
 	package.loaded["features.display_awake"] = features.displayAwake
@@ -58,7 +58,7 @@ local function loadManager()
 		},
 	}
 
-	return require("modules.feature_manager"), features, observations
+	return require("core.feature_manager"), features, observations
 end
 
 local manager, features = loadManager()

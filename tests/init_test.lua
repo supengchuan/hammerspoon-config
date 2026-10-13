@@ -8,7 +8,7 @@ local featureConfig = {
 	display_awake = false,
 }
 
-package.loaded["modules.feature_manager"] = {
+package.loaded["core.feature_manager"] = {
 	start = function(config)
 		table.insert(events, { name = "manager", config = config })
 	end,

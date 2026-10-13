@@ -1,4 +1,4 @@
-local featureManager = require("modules.feature_manager")
+local featureManager = require("core.feature_manager")
 local featurePath = hs.configdir .. "/feature.lua"
 
 if hs.fs.attributes(featurePath) then
