@@ -137,6 +137,12 @@ timerCallbacks[2]()
 assert(#executeCalls == 1, "stale timer should not request display sleep")
 assert(#caffeinateCalls == callsAfterStop, "stale timer should not change prevention")
 
+batteryWatchers[1].callback()
+sessionWatchers[1].callback(hs.caffeinate.watcher.screensDidUnlock)
+sessionWatchers[1].callback(hs.caffeinate.watcher.screensDidLock)
+assert(#caffeinateCalls == callsAfterStop, "stale watcher callbacks should not change prevention")
+assert(#timerCallbacks == 2, "stale watcher callbacks should not schedule timers")
+
 displayAwake.stop()
 assert(batteryWatchers[1].stopCount == 1)
 assert(sessionWatchers[1].stopCount == 1)

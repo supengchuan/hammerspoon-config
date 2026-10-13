@@ -74,6 +74,10 @@ systemEvents.stop()
 assert(systemEvents.isRunning() == false)
 assert(watchers[1].stopCount == 1)
 
+now = 20
+watchers[1].callback(hs.caffeinate.watcher.systemWillSleep)
+assert(pauseCalls == 3, "stale callbacks should be inert after stop")
+
 systemEvents.stop()
 assert(watchers[1].stopCount == 1, "repeated stop should be inert")
 

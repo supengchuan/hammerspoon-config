@@ -17,9 +17,18 @@ local bindings = {
 }
 
 local function deleteHotkeys(hotkeys)
+	local failed = {}
+	local firstError
 	for _, hotkey in ipairs(hotkeys) do
-		hotkey:delete()
+		local ok, err = pcall(function()
+			hotkey:delete()
+		end)
+		if not ok then
+			table.insert(failed, hotkey)
+			firstError = firstError or err
+		end
 	end
+	return failed, firstError
 end
 
 function M.start()
@@ -39,7 +48,10 @@ function M.start()
 	end)
 
 	if not ok then
-		deleteHotkeys(created)
+		local failed = deleteHotkeys(created)
+		if #failed > 0 then
+			activeHotkeys = failed
+		end
 		error(err, 0)
 	end
 
@@ -52,8 +64,11 @@ function M.stop()
 	end
 
 	local hotkeys = activeHotkeys
-	activeHotkeys = nil
-	deleteHotkeys(hotkeys)
+	local failed, err = deleteHotkeys(hotkeys)
+	activeHotkeys = #failed > 0 and failed or nil
+	if err then
+		error(err, 0)
+	end
 end
 
 function M.isRunning()

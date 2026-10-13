@@ -17,6 +17,10 @@ local function pauseOnce()
 end
 
 local function handleEvent(event)
+	if not watcher then
+		return
+	end
+
 	-- sessionDidResignActive 比 screensDidLock 更早触发，可以在会话真正锁住前
 	-- 给 QQ 音乐一点时间接收菜单命令。
 	if

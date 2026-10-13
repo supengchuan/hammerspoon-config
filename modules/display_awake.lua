@@ -23,6 +23,14 @@ local function syncDisplayIdlePrevention()
 	setDisplayIdlePrevented(shouldPrevent)
 end
 
+local function handlePowerSourceChange()
+	if not running then
+		return
+	end
+
+	syncDisplayIdlePrevention()
+end
+
 local function cancelDisplaySleepTimer()
 	if not displaySleepTimer then
 		return
@@ -54,6 +62,10 @@ local function scheduleDisplaySleep()
 end
 
 local function handleSessionEvent(event)
+	if not running then
+		return
+	end
+
 	if event == hs.caffeinate.watcher.sessionDidResignActive or event == hs.caffeinate.watcher.screensDidLock then
 		sessionActive = false
 
@@ -81,7 +93,7 @@ function M.start()
 	local ok, err = pcall(function()
 		syncDisplayIdlePrevention()
 
-		batteryCandidate = hs.battery.watcher.new(syncDisplayIdlePrevention)
+		batteryCandidate = hs.battery.watcher.new(handlePowerSourceChange)
 		batteryCandidate:start()
 
 		sessionCandidate = hs.caffeinate.watcher.new(handleSessionEvent)
