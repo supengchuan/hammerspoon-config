@@ -23,7 +23,7 @@ test -x /opt/homebrew/bin/blueutil
 ```
 
 最后一条命令应输出 `0` 或 `1`，分别表示蓝牙关闭或开启。若 Homebrew 或 `blueutil` 位于其他路径，
-请将 `modules/bluetooth.lua` 中的可执行文件路径改为实际绝对路径。
+请将 `actions/bluetooth.lua` 中的可执行文件路径改为实际绝对路径。
 
 ## 使用
 
@@ -63,6 +63,14 @@ return {
 - 快捷键
 - 锁屏或睡眠时暂停音乐
 - 显示器常亮
+
+## 代码结构
+
+- `core/`：负责功能生命周期和启停编排。
+- `features/`：包含可通过 `feature.lua` 启停的完整功能。
+- `actions/`：包含不关心调用来源的可复用系统操作。
+
+依赖只能从入口依次流向 `core`、`features`、`actions`，下层不能反向依赖上层。
 
 ## 快捷键
 

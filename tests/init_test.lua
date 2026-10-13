@@ -13,12 +13,6 @@ package.loaded["core.feature_manager"] = {
 		table.insert(events, { name = "manager", config = config })
 	end,
 }
-package.loaded["modules.feature_menu"] = {
-	start = function()
-		error("feature menu should not start")
-	end,
-}
-
 dofile = function(path)
 	if path == featurePath then
 		return featureConfig
