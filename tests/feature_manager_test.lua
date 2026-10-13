@@ -36,9 +36,9 @@ local function loadManager()
 	}
 
 	package.loaded["modules.feature_manager"] = nil
-	package.loaded["modules.hotkeys"] = features.hotkeys
-	package.loaded["modules.system_events"] = features.systemEvents
-	package.loaded["modules.display_awake"] = features.displayAwake
+	package.loaded["features.hotkeys"] = features.hotkeys
+	package.loaded["features.system_events"] = features.systemEvents
+	package.loaded["features.display_awake"] = features.displayAwake
 
 	hs = {
 		logger = {

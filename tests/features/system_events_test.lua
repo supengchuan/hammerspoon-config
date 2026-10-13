@@ -42,7 +42,7 @@ hs = {
 	},
 }
 
-local systemEvents = require("modules.system_events")
+local systemEvents = require("features.system_events")
 
 systemEvents.start()
 assert(systemEvents.isRunning() == true)
@@ -88,9 +88,9 @@ assert(watchers[2].startCount == 1)
 systemEvents.stop()
 assert(watchers[2].stopCount == 1)
 
-package.loaded["modules.system_events"] = nil
+package.loaded["features.system_events"] = nil
 watcherStartShouldFail = true
-local failingSystemEvents = require("modules.system_events")
+local failingSystemEvents = require("features.system_events")
 local startOk = pcall(failingSystemEvents.start)
 assert(startOk == false, "watcher start failure should propagate")
 assert(watchers[3].stopCount == 1, "failed watcher should be cleaned up")

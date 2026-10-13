@@ -1,6 +1,6 @@
-local hotkeys = require("modules.hotkeys")
-local systemEvents = require("modules.system_events")
-local displayAwake = require("modules.display_awake")
+local hotkeys = require("features.hotkeys")
+local systemEvents = require("features.system_events")
+local displayAwake = require("features.display_awake")
 
 local M = {}
 local logger = hs.logger.new("feature_manager")

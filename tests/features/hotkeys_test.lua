@@ -55,7 +55,7 @@ hs = {
 	},
 }
 
-local hotkeys = require("modules.hotkeys")
+local hotkeys = require("features.hotkeys")
 
 hotkeys.start()
 assert(hotkeys.isRunning() == true)
@@ -91,19 +91,19 @@ assert(bindCalls == 14, "restart should create fresh bindings")
 hotkeys.stop()
 assert(deleteCalls == 14)
 
-package.loaded["modules.hotkeys"] = nil
+package.loaded["features.hotkeys"] = nil
 bindCalls = 0
 deleteCalls = 0
 bindings = {}
 failOnBindCall = 4
 
-local failingHotkeys = require("modules.hotkeys")
+local failingHotkeys = require("features.hotkeys")
 local ok = pcall(failingHotkeys.start)
 assert(ok == false, "bind failure should propagate")
 assert(deleteCalls == 3, "partial start should delete earlier bindings")
 assert(failingHotkeys.isRunning() == false)
 
-package.loaded["modules.hotkeys"] = nil
+package.loaded["features.hotkeys"] = nil
 bindCalls = 0
 deleteCalls = 0
 deleteAttempts = 0
@@ -111,7 +111,7 @@ bindings = {}
 failOnBindCall = nil
 failOnDeleteCall = 4
 
-local deleteFailingHotkeys = require("modules.hotkeys")
+local deleteFailingHotkeys = require("features.hotkeys")
 deleteFailingHotkeys.start()
 local stopOk = pcall(deleteFailingHotkeys.stop)
 assert(stopOk == false, "delete failure should propagate")

@@ -76,7 +76,7 @@ hs = {
 	},
 }
 
-local displayAwake = require("modules.display_awake")
+local displayAwake = require("features.display_awake")
 assert(displayAwake.isRunning() == false)
 
 displayAwake.start()
@@ -159,9 +159,9 @@ assert(batteryWatchers[2].stopCount == 1)
 assert(sessionWatchers[2].stopCount == 1)
 assert(lastCaffeinateEnabled() == false)
 
-package.loaded["modules.display_awake"] = nil
+package.loaded["features.display_awake"] = nil
 sessionWatcherStartShouldFail = true
-local failingDisplayAwake = require("modules.display_awake")
+local failingDisplayAwake = require("features.display_awake")
 local startOk = pcall(failingDisplayAwake.start)
 assert(startOk == false, "partial watcher startup should fail")
 assert(batteryWatchers[3].stopCount == 1)
