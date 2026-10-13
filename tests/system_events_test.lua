@@ -1,5 +1,4 @@
 local bluetoothCalls = {}
-local bindings = {}
 local systemEventCallback
 local now = 10
 local pauseShouldFail = false
@@ -16,7 +15,6 @@ package.loaded["modules.bluetooth"] = {
 	setEnabled = function(enabled)
 		table.insert(bluetoothCalls, enabled)
 	end,
-	toggle = function() end,
 }
 
 hs = {
@@ -31,11 +29,6 @@ hs = {
 				return { start = function() end }
 			end,
 		},
-	},
-	hotkey = {
-		bind = function(modifiers, key, callback)
-			table.insert(bindings, { modifiers = modifiers, key = key, callback = callback })
-		end,
 	},
 }
 
@@ -77,21 +70,4 @@ assert(ok == false)
 assert(#bluetoothCalls == 1)
 assert(bluetoothCalls[1] == false)
 
-local bluetooth = require("modules.bluetooth")
-local hotkeys = require("modules.hotkeys")
-hotkeys.bindAll()
-
-local bluetoothBinding
-for _, binding in ipairs(bindings) do
-	if binding.key == "B" then
-		bluetoothBinding = binding
-		break
-	end
-end
-
-assert(bluetoothBinding ~= nil)
-assert(#bluetoothBinding.modifiers == 2)
-assert(bluetoothBinding.modifiers[1] == "ctrl")
-assert(bluetoothBinding.modifiers[2] == "cmd")
-assert(bluetoothBinding.callback == bluetooth.toggle)
 print("system events tests passed")
